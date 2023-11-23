@@ -1,11 +1,14 @@
 package com.github.olcmateusz.warglaive.web;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.github.olcmateusz.warglaive.domain.LeaderboardsResponse;
@@ -45,17 +48,22 @@ public class LeaderboardsController {
 		}
 
 
-	@GetMapping("{region}/{bracket}")
-	public String params(@PathVariable String region, @PathVariable String bracket) {
-		System.out.println(region + " " + bracket);
-		return "leaderboards";
-	}
+//	@GetMapping("{region}/{bracket}")
+//	public String params(@PathVariable String region, @PathVariable String bracket) {
+//		System.out.println(region + " " + bracket);
+//		return "leaderboards";
+//	}
 	
 	
 	
-	@GetMapping(value = "/update")
-	public String printSecret(ModelMap model) {
-
+	@GetMapping(value ={ "", "{region}/{bracket}" })
+	public String printSecret(@PathVariable Optional<String> region, @PathVariable Optional<String> bracket, ModelMap model) {
+		
+		String reg = region.isPresent() ? region.get() : "EU";
+		String bra = bracket.isPresent() ? bracket.get() : "3v3";
+		
+		System.out.println(reg);
+		System.out.println(bra);
 		
 		LeaderboardsResponse response = webClient.get()
 			.uri(uriBuilder -> uriBuilder

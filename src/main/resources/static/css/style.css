@@ -76,7 +76,7 @@ input{
   height: 75px;
   line-height: 75px;
   width: 80%;
-  background-image: url("@{/IMG/background_nav.jpg}");
+  background-image: url(../IMG/background_nav.jpg);
   background-position: center;
   margin-left: calc(10% + 40px);
   transition: all .3s ease-in-out;
@@ -134,7 +134,7 @@ input{
 }
 .mobileNav a{
   text-decoration: none;
-  background-image: url("@{/IMG/background_nav.jpg}");
+  background-image: url(..//IMG/background_nav.jpg);
   color: #DAA520;
   border-top: solid 3px #000;
 }
@@ -321,7 +321,7 @@ footer{
   justify-content: space-around;
   position: relative;
   height: 300px;
-  background-image: url("@{/IMG/Panel-bg-stacked.18def74ed60ab9f1f4139f87349d2f79.jpg}");
+  background-image: url(../IMG/Panel-bg-stacked.18def74ed60ab9f1f4139f87349d2f79.jpg);
 }
 
 footer .f1 .f2 .f3{
@@ -346,7 +346,7 @@ footer .f1 .f2 .f3{
 .stickyFooter{
   height:8vh;
   line-height: 8vh;
-  background-image: url("@{/IMG/szarypas.png}");
+  background-image: url(../IMG/szarypas.png);
   background-position:  center;
   font-family: Morpheus;
   color: #FFFFFF;
@@ -418,12 +418,12 @@ button{
   font-family: 'Morpheus';
   font-style: normal;
   font-weight: normal;
-  src: url("@/Czcionki/MORPHEUS.TTF}");
+  src: url(../Czcionki/MORPHEUS.TTF);
 }
 
 @font-face {
   font-family: 'friz_quad';
-  src: url("@{/Czcionki/friz-quadrata-std-medium-5870338ec7ef8.otf}");
+  src: url(../Czcionki/friz-quadrata-std-medium-5870338ec7ef8.otf);
 }
 
 
