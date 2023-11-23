@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head >
+
+</head>
+<body>
+<div th:fragment="head" th:remove="tag">
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">-->
+    <meta charset="utf-8">
+    <title>Warglaive Project</title>
+    <link rel="icon" href="/IMG/inv_weapon_glave_01.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</div>
+<div th:fragment="menu" th:remove="tag">
+
+        <div class="backgroudvid">
+            <video th:src="@{/IMG/header-illidan.webm}" autoplay muted loop>
+            </video>
+        </div>
+
+        <div class="spaceTop">
+        </div>
+    <div id="trickBootstrap">
+        <div class="navbar">
+            <a class="logo" th:href="@{/}">
+                <div class="siteNavLogo">
+                    <img alt="logofull" th:src="@{/IMG/Logo-wow-sitenav.596840db77b4d485a44d65e897e3de57.png}" class="logoBig">
+                    <img alt="logomobile" th:src="@{/IMG/Logo-wowIcon.01e2c443798558c38d8e3b143a6f0d03.png}" class="logoSmall">
+                </div>
+            </a>
+
+            <div class="navwrapper">
+                <ul class="navlink">
+                    <li class="nav-link">
+                        <a th:href="@{/arena_ladder}">Arena Ladder</a>
+                    </li>
+                    <li class="nav-link">
+                        <a th:href="@{/armory}">Armory</a>
+                    </li>
+                    <li class="nav-link">
+                        <a th:href="@{/item3}">Item3</a>
+                    </li>
+                    <li class="nav-link">
+                        <a th:href="@{/download}">Download</a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="menuButton">
+                <div class="menuButtonBurger">
+
+                </div>
+            </div>
+            <a class="floatr" th:href="@{/login}">Log In</a>
+        </div>
+
+        <script th:src="@{/JS/navbar.js}"></script>
+
+        <div class="mobileNav">
+            <a th:href="@{/Create Account/index.html}">Create Account</a>
+            <a th:href="@{/Forum/index.html}">Forum</a>
+            <a th:href="@{/Download/index.html}">Download</a>
+            <a th:href="@{/Armory/index.html}">Armory</a>
+            <a th:href="@{/Log In/index.html}">Log In</a>
+        </div>
+
+        <script th:src="@{/JS/burger.js}"></script>
+    </div>
+        <div class="spaceTiny">
+        </div>
+
+</div>
+<div class="content" th:fragment="content">
+</div>
+<div th:fragment="footer">
+<footer>
+    <div class="f1">
+        <p class="footerText">THERE SHOULD BE NO MORE PROBLEMS WITH THAT</p>
+    </div>
+
+    <div class="f2">
+        <img src="../IMG/bad-language.1WAfa.png" alt="language">
+        <img src="../IMG/violence.3D7mK.png" alt="violence">
+        <img src="../IMG/online-gameplay.3AgpR.png" alt="online">
+        <img src="../IMG/ingames-purchase-white-EN.jpg" alt="purchase">
+    </div>
+
+    <div class="f3">
+        <p class="footerText">THERE SHOULD BE NO MORE PROBLEMS WITH THAT</p>
+    </div>
+
+</footer>
+
+<div class="spaceBottom">
+
+</div>
+
+<div class="stickyFooter">
+    <p>THIS SHOULD BE ON TOP OF STICKY FOOTER</p>
+</div>
+</div>
+</body>
+</html>

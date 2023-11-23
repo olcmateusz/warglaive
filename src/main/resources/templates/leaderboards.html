@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:insert="~{fragments/general :: head}">
+    <!--    <link rel="stylesheet" th:href="@{/style.css}">-->
+
+</head>
+<body>
+<div th:insert="~{fragments/general :: menu}"></div>
+<div class="content" style="background-color:rgba(16,16,16,0.8); justify-content: center;">
+	<h1>3v3 Leaderboards</h1>
+	
+	<table>
+	  <tr>
+	    <th>Title</th>
+	    <th>Rank</th>
+	    <th>Rating</th>
+	    <th>Name</th>
+	    <th>Class</th>
+	    <th>Race</th>
+	    <th>Realm</th>
+	    <th>Stats</th>
+	    <th>Win ratio</th>
+	    <th>Faction</th>
+	  </tr>
+	  <tr th:each="player : ${leaderboards}">
+	  	<!-- Expected Title -->
+	  	<td>Title</td>
+	  	<!-- Current rank -->
+	    <td th:text="${player.rank}"></td>
+	    <!-- Current rating -->
+	    <td th:text="${player.rating}"></td>
+	    <!-- Character name -->
+	    <td th:text="${player.character.name}"></td>
+	    <!-- Character class -->
+	    <td>Class Placeholder</td>
+	    <!-- Character race -->
+	    <td>Race Placeholder</td>
+	    <!-- Character realm -->
+	    <td>Realm Placeholder</td>
+	    <!-- Character win/lose stats -->
+	    <td th:text="|${player.season_match_statistics.won}/${player.season_match_statistics.lost}|"></td>
+	    <!-- Win percentage -->
+	    <td th:with="ratio=${(100 * player.season_match_statistics.won) / player.season_match_statistics.played}" th:text="${ratio}"></td>
+	    <!-- Faction -->
+	    <td th:text="${player.faction}"></td>
+	  </tr>
+	</table>
+	<!--
+	<div th:each="player : ${leaderboards}">
+	    <a th:href="@{/player/{playername}(playername=${player.character.name})}" th:text="${player.character.name}"></a>
+	</div>
+	-->
+</div>
+<div th:insert="~{fragments/general :: footer}"></div>
+</body>
+</html>
