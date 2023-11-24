@@ -18,6 +18,12 @@ public class PlayableCharacter {
 	@ManyToOne
 	@JoinColumn(name="realm_id")
 	private Realm realm;
+	@ManyToOne
+	@JoinColumn(name="race_id")
+	private Race race;
+	@ManyToOne
+	@JoinColumn(name="character_class_id")
+	private CharacterClass character_class;
 	
 	public PlayableCharacter() {
 		
@@ -27,6 +33,15 @@ public class PlayableCharacter {
 		this.name = name;
 		this.blizzard_id = blizzard_id;
 		this.realm = realm;
+	}
+	
+
+	public PlayableCharacter(String name, long blizzard_id, Realm realm, Race race, CharacterClass character_class) {
+		this.name = name;
+		this.blizzard_id = blizzard_id;
+		this.realm = realm;
+		this.race = race;
+		this.character_class = character_class;
 	}
 
 	public long getId() {
@@ -60,12 +75,30 @@ public class PlayableCharacter {
 	public void setRealm(Realm realm) {
 		this.realm = realm;
 	}
+	
+	public Race getRace() {
+		return race;
+	}
+
+	public void setRace(Race race) {
+		this.race = race;
+	}
+
+	public CharacterClass getCharacter_class() {
+		return character_class;
+	}
+
+	public void setCharacter_class(CharacterClass character_class) {
+		this.character_class = character_class;
+	}
 
 	@Override
 	public String toString() {
 		return "PlayableCharacter [id=" + id + ", name=" + name + ", blizzard_id=" + blizzard_id + ", realm=" + realm
-				+ "]";
+				+ ", race=" + race + ", character_class=" + character_class + "]";
 	}
+
+
 	
 	
 	
