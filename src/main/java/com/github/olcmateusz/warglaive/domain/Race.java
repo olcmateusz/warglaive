@@ -13,6 +13,16 @@ public class Race {
 	private long id;
 	private String name;
 	
+	
+	public Race() {
+	}
+	
+	
+	public Race(String name) {
+		this.name = name;
+	}
+
+
 	public long getId() {
 		return id;
 	}

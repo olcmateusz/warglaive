@@ -12,6 +12,7 @@ public class Realm {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String slug;
+	private String name;
 	private long blizzard_id;
 	
 	public Realm() {
@@ -23,6 +24,13 @@ public class Realm {
 		this.blizzard_id = blizzard_id;
 	}
 	
+	
+	public Realm(String slug, String name, long blizzard_id) {
+		this.slug = slug;
+		this.name = name;
+		this.blizzard_id = blizzard_id;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -35,6 +43,15 @@ public class Realm {
 	public void setSlug(String slug) {
 		this.slug = slug;
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public long getBlizzard_id() {
 		return blizzard_id;
 	}

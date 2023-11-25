@@ -27,6 +27,8 @@ public class Player {
 	@Column(name = "`rank`")
 	private int rank;
 	private int rating;
+	private String bracket;
+	private String region;
 	@ManyToOne
 	@JoinColumn(name="season_match_statistics_id")
 	private Statistic season_match_statistics;
@@ -41,6 +43,19 @@ public class Player {
 		this.faction = faction;
 		this.rank = rank;
 		this.rating = rating;
+		this.season_match_statistics = season_match_statistics;
+	}
+	
+	
+
+	public Player(PlayableCharacter character, Faction faction, int rank, int rating, String bracket, String region,
+			Statistic season_match_statistics) {
+		this.character = character;
+		this.faction = faction;
+		this.rank = rank;
+		this.rating = rating;
+		this.bracket = bracket;
+		this.region = region;
 		this.season_match_statistics = season_match_statistics;
 	}
 
@@ -91,12 +106,33 @@ public class Player {
 	public void setSeason_match_statistics(Statistic season_match_statistics) {
 		this.season_match_statistics = season_match_statistics;
 	}
+	
+	
+
+	public String getBracket() {
+		return bracket;
+	}
+
+	public void setBracket(String bracket) {
+		this.bracket = bracket;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
 
 	@Override
 	public String toString() {
 		return "Player [id=" + id + ", character=" + character + ", faction=" + faction + ", rank=" + rank + ", rating="
-				+ rating + ", season_match_statistics=" + season_match_statistics + "]";
+				+ rating + ", bracket=" + bracket + ", region=" + region + ", season_match_statistics="
+				+ season_match_statistics + "]";
 	}
+
+	
 	
 	
 
