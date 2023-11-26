@@ -177,12 +177,12 @@ public class LeaderboardsController {
 				playableCharacterRepo.save(myCharacter);
 				
 				
-				System.out.println("Player: " + player.toString());
+//				System.out.println("Player: " + player.toString());
 				
 				
 				//save playableCharacterAdditionalInfo
 				myPlayer.setCharacter(myCharacter);
-				System.out.println("Player with set additionals: " + myPlayer.toString());
+//				System.out.println("Player with set additionals: " + myPlayer.toString());
 				
 				//add Region to player
 				myPlayer.setRegion(region);
@@ -190,15 +190,15 @@ public class LeaderboardsController {
 				//add Bracket to player
 				myPlayer.setBracket(bracket);
 				
-				System.out.println("Player with bracket and region: " + myPlayer.toString());
+//				System.out.println("Player with bracket and region: " + myPlayer.toString());
 				//save Statistics
 				Statistic myStats = statisticService.getStatistics(myPlayer.getSeason_match_statistics());
 				statisticService.save(myStats);
 				//save player
 				playerRepo.save(myPlayer);
 				
-				System.out.println("Player after saving: " + player.toString());
-				System.out.println("NEXT!");
+//				System.out.println("Player after saving: " + player.toString());
+//				System.out.println("NEXT!");
 				
 						
 			}

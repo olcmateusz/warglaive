@@ -16,7 +16,7 @@ public class PlayableCharacterService {
 	PlayableCharacterRepository playableCharacterRepo;
 	
 	public PlayableCharacter getPlayableCharacter(PlayableCharacter playableCharacter){
-		Optional<PlayableCharacter> playerInQuestion = playableCharacterRepo.findById(playableCharacter.getId());
+		Optional<PlayableCharacter> playerInQuestion = playableCharacterRepo.findByName(playableCharacter.getName());
 		return playerInQuestion.orElse(playableCharacter);
 	}
 }
