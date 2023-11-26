@@ -19,11 +19,6 @@ import com.github.olcmateusz.warglaive.domain.Player;
 import com.github.olcmateusz.warglaive.domain.Race;
 import com.github.olcmateusz.warglaive.domain.Realm;
 import com.github.olcmateusz.warglaive.domain.Statistic;
-import com.github.olcmateusz.warglaive.enums.Faction;
-import com.github.olcmateusz.warglaive.repository.PlayableCharacterRepository;
-import com.github.olcmateusz.warglaive.repository.PlayerRepository;
-import com.github.olcmateusz.warglaive.repository.RealmRepository;
-import com.github.olcmateusz.warglaive.repository.StatisticRepository;
 import com.github.olcmateusz.warglaive.service.CharacterClassService;
 import com.github.olcmateusz.warglaive.service.PlayableCharacterService;
 import com.github.olcmateusz.warglaive.service.PlayerService;
@@ -43,10 +38,6 @@ public class LeaderboardsController {
     private WebClient webClient;
     private WebClient euWebClient;
     private WebClient usWebClient;
-    private PlayerRepository playerRepo;
-    private PlayableCharacterRepository playableCharacterRepo;
-    private RealmRepository realmRepo;
-    private StatisticRepository StatisticRepo;
     private RaceService raceService;
     private CharacterClassService characterClassService;
     private RealmService realmService;
@@ -58,23 +49,18 @@ public class LeaderboardsController {
 //    private final RateLimiter rateLimiter = RateLimiter.create(REQUEST_PER_SECOND);
 
 
-	public LeaderboardsController(WebClient webClient, WebClient usWebClient, WebClient euWebClient, PlayerRepository playerRepo,
-				PlayableCharacterRepository playableCharacterRepo, RealmRepository realmRepo,
+	public LeaderboardsController(WebClient webClient, WebClient usWebClient, WebClient euWebClient,
 				RaceService raceService, CharacterClassService characterClassService, RealmService realmService,StatisticService statisticService,
-				PlayerService playerService,PlayableCharacterService playableCharacterService, StatisticRepository statisticRepo) {
+				PlayerService playerService,PlayableCharacterService playableCharacterService) {
 			this.webClient = webClient;
 			this.euWebClient = euWebClient;
 			this.usWebClient = usWebClient;
-			this.playerRepo = playerRepo;
-			this.playableCharacterRepo = playableCharacterRepo;
-			this.realmRepo = realmRepo;
 			this.raceService = raceService;
 			this.characterClassService = characterClassService;
 			this.realmService = realmService;
 			this.statisticService = statisticService;
 			this.playerService = playerService;
 			this.playableCharacterService = playableCharacterService;
-			StatisticRepo = statisticRepo;
 		}
 
 	@GetMapping(value ={"update", "update/{pathRegion}/{pathBracket}", "update/{pathRegion}/{pathBracket}/{pvpSeason}" })
@@ -89,9 +75,7 @@ public class LeaderboardsController {
 		String locale;
 		String pvpRegion;
 		WebClient client;
-//		namespaceLeaderboard = region.equals("EU") ? "dynamic-classic-eu" : "dynamic-classic-us";
-//		namespaceProfile = region.equals("EU") ? "profile-classic-eu" : "profile-classic-us";
-//		locale = region.equals("EU") ? "en_GB" : "en_US";
+
 		
 		if (region.equals("EU")) {
 			namespaceLeaderboard = "dynamic-classic-eu";
@@ -119,10 +103,8 @@ public class LeaderboardsController {
 		
 		LeaderboardsResponse response = client.get()
 				.uri(uriBuilder -> uriBuilder
-//					    .path("/data/wow/pvp-region/0/pvp-season/8/pvp-leaderboard")
 						.path(leaderboardsPath)
 						.pathSegment("pvp-region", pvpRegion,"pvp-season", pvpSeason,"pvp-leaderboard",bracket)
-//					    .path("/" + bracket)
 					    .queryParam("namespace", namespaceLeaderboard)
 					    .build())
 					  .retrieve()
@@ -131,7 +113,7 @@ public class LeaderboardsController {
 		
 		response.getEntries();
 
-//		Map<String,PlayableCharacter> testMap = new HashMap<>();
+
 		for (Player player : response.getEntries()) {
 			PlayableCharacter playableCharacterAdditionalInfo = client.get()
 					.uri(uriBuilder -> uriBuilder
@@ -148,7 +130,7 @@ public class LeaderboardsController {
 	                                ((WebClientResponseException) ex).getStatusCode().is5xxServerError())
 	                )
 					.block();
-//			System.out.println(player.getCharacter().toString());
+
 			
 			if(null != playableCharacterAdditionalInfo) {
 				
@@ -158,7 +140,6 @@ public class LeaderboardsController {
 				Player myPlayer = playerService.getPlayer(player);
 				
 				//save Extended playableCharaceter
-				//THIS IS WRONG
 				PlayableCharacter myCharacter = playableCharacterService.getPlayableCharacter(myPlayer.getCharacter());
 				
 				//Ovverride blizzard race with mine
@@ -174,15 +155,11 @@ public class LeaderboardsController {
 				Realm realm = realmService.getRealmByName(playableCharacterAdditionalInfo.getRealm().getSlug());
 				myCharacter.setRealm(realm);
 				
-				playableCharacterRepo.save(myCharacter);
-				
-				
-//				System.out.println("Player: " + player.toString());
-				
+				playableCharacterService.save(myCharacter);
 				
 				//save playableCharacterAdditionalInfo
 				myPlayer.setCharacter(myCharacter);
-//				System.out.println("Player with set additionals: " + myPlayer.toString());
+
 				
 				//add Region to player
 				myPlayer.setRegion(region);
@@ -190,15 +167,13 @@ public class LeaderboardsController {
 				//add Bracket to player
 				myPlayer.setBracket(bracket);
 				
-//				System.out.println("Player with bracket and region: " + myPlayer.toString());
 				//save Statistics
 				Statistic myStats = statisticService.getStatistics(myPlayer.getSeason_match_statistics());
 				statisticService.save(myStats);
 				//save player
-				playerRepo.save(myPlayer);
+				playerService.save(myPlayer);
 				
-//				System.out.println("Player after saving: " + player.toString());
-//				System.out.println("NEXT!");
+
 				
 						
 			}
@@ -207,52 +182,6 @@ public class LeaderboardsController {
 		return "leaderboards";
 	}
 	
-	
-	@GetMapping(value ={ "", "{pathRegion}/{pathBracket}" })
-	public String printSecret(@PathVariable Optional<String> pathRegion, @PathVariable Optional<String> pathBracket, ModelMap model) {
-		
-		String region = pathRegion.isPresent() ? pathRegion.get() : "EU";
-		String bracket = pathBracket.isPresent() ? pathBracket.get() : "3v3";
-		
-		System.out.println(region);
-		System.out.println(bracket);
-		
-		LeaderboardsResponse response = webClient.get()
-			.uri(uriBuilder -> uriBuilder
-				    .path("/data/wow/pvp-region/0/pvp-season/8/pvp-leaderboard/3v3")
-				    .queryParam("namespace", "dynamic-classic-eu")
-				    .build())
-				  .retrieve()
-				  .bodyToMono(LeaderboardsResponse.class)
-				  .block();
-		
-		model.put("leaderboards", response.getEntries());
-		
-		System.out.println(response.getEntries().get(15).getCharacter().toString());
-		
-//		playerRepo.saveAll(response.getEntries());
-//		
-		return "leaderboards";
-//
-//
-	}
-
-	@GetMapping(value="test")
-	public String testowe(){
-		Statistic stats = new Statistic(10,9,1);
-		StatisticRepo.save(stats);
-		Realm realm = new Realm("firemaw",15);
-		realmRepo.save(realm);
-		Faction faction = Faction.ALLIANCE;
-		PlayableCharacter character = new PlayableCharacter("robert", 105, realm);
-		playableCharacterRepo.save(character);
-		Player player = new Player(character,faction,1,1500,stats);
-		
-		playerRepo.save(player);
-		
-		return "leaderboards";
-		
-	}
 
 
 }

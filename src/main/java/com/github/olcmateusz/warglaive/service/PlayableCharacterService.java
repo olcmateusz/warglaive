@@ -19,4 +19,8 @@ public class PlayableCharacterService {
 		Optional<PlayableCharacter> playerInQuestion = playableCharacterRepo.findByName(playableCharacter.getName());
 		return playerInQuestion.orElse(playableCharacter);
 	}
+	
+	public PlayableCharacter save(PlayableCharacter playableCharacter) {
+		return playableCharacterRepo.save(playableCharacter);
+	}
 }
