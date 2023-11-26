@@ -31,9 +31,7 @@ public class OAuthClientConfiguration {
         ClientRegistration registration = ClientRegistration
                 .withRegistrationId("blizzard")
                 .tokenUri("https://oauth.battle.net/token")
-//                .clientId("07a3336a2e8449b6b8441a1574363694")
                 .clientId(blizzConfig.clientId())
-//                .clientSecret("w16OqRKsAv4r354LNGnbLmOalxzAiLzi")
                 .clientSecret(blizzConfig.clientSecret())
 //                .scope("wow.profile")
                 .authorizationGrantType(new AuthorizationGrantType("client_credentials"))
@@ -43,6 +41,17 @@ public class OAuthClientConfiguration {
 
     @Bean
     WebClient webClient(ReactiveClientRegistrationRepository clientRegistrations) {
+        InMemoryReactiveOAuth2AuthorizedClientService clientService = new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrations);
+        AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager = new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(clientRegistrations, clientService);
+        ServerOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+        oauth.setDefaultClientRegistrationId("blizzard");
+        return WebClient.builder()
+                .filter(oauth)
+                .build();
+    }
+    
+    @Bean
+    WebClient euWebClient(ReactiveClientRegistrationRepository clientRegistrations) {
         final int size = 16 * 1024 * 1024;
         final ExchangeStrategies strategies = ExchangeStrategies.builder()
             .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
@@ -57,5 +66,20 @@ public class OAuthClientConfiguration {
                 .filter(oauth)
                 .build();
     }
-
+    @Bean
+    WebClient usWebClient(ReactiveClientRegistrationRepository clientRegistrations) {
+        final int size = 16 * 1024 * 1024;
+        final ExchangeStrategies strategies = ExchangeStrategies.builder()
+            .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
+            .build();
+        InMemoryReactiveOAuth2AuthorizedClientService clientService = new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrations);
+        AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager authorizedClientManager = new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(clientRegistrations, clientService);
+        ServerOAuth2AuthorizedClientExchangeFilterFunction oauth = new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
+        oauth.setDefaultClientRegistrationId("blizzard");
+        return WebClient.builder()
+        		.exchangeStrategies(strategies)
+        		.baseUrl("https://us.api.blizzard.com")
+                .filter(oauth)
+                .build();
+    }
 }
