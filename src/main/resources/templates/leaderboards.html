@@ -8,25 +8,26 @@
 <div th:insert="~{fragments/general :: menu}"></div>
 <div class="content" style="background-color:rgba(16,16,16,0.8); justify-content: center;">
 	<h1>Leaderboards</h1>
-	<div>
-	<form th:action="@{'/leaderboards/' + ${region} + '/2v2'}" method="get">
-	    <button type="submit">2v2</button>
+	<div style="display:flex;justify-content:space-evenly">
+
+	<form style="width:100px;height:45px;" th:action="@{'/leaderboards/' + ${region} + '/2v2'}" method="get">
+	    <button style="height:100%" type="submit">2v2</button>
 	</form>
 
-	<form th:action="@{'/leaderboards/' + ${region} + '/3v3'}" method="get">
-	    <button type="submit">3v3</button>
+	<form style="width:100px;height:45px;" th:action="@{'/leaderboards/' + ${region} + '/3v3'}" method="get">
+	    <button style="height:100%" type="submit">3v3</button>
 	</form>
-	<form th:action="@{'/leaderboards/' + 'EU/' + ${bracket}}" method="get">
-	    <button type="submit">EU</button>
-	</form>
-	<form th:action="@{'/leaderboards/' + 'US/' + ${bracket}}" method="get">
-	    <button type="submit">US</button>
-	</form>
-	</div>
-	<div>
 
-	<a th:href="@{/leaderboards/EU/2v2}">Click pls</a>
+
+	<form style="width:100px;height:45px;" th:action="@{'/leaderboards/' + 'EU/' + ${bracket}}" method="get">
+	    <button style="height:100%" type="submit">EU</button>
+	</form>
+	<form style="width:100px;height:45px;" th:action="@{'/leaderboards/' + 'US/' + ${bracket}}" method="get">
+	    <button style="height:100%" type="submit">US</button>
+	</form>
 	</div>
+	
+	
 	<table>
 	  <tr>
 	    <th>Title</th>
