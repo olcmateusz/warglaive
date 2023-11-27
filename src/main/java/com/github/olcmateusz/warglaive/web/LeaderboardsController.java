@@ -1,8 +1,10 @@
 package com.github.olcmateusz.warglaive.web;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,6 +21,8 @@ import com.github.olcmateusz.warglaive.domain.Player;
 import com.github.olcmateusz.warglaive.domain.Race;
 import com.github.olcmateusz.warglaive.domain.Realm;
 import com.github.olcmateusz.warglaive.domain.Statistic;
+import com.github.olcmateusz.warglaive.domain.rewards.Reward;
+import com.github.olcmateusz.warglaive.domain.rewards.RewardsResponse;
 import com.github.olcmateusz.warglaive.service.CharacterClassService;
 import com.github.olcmateusz.warglaive.service.PlayableCharacterService;
 import com.github.olcmateusz.warglaive.service.PlayerService;
@@ -69,6 +73,7 @@ public class LeaderboardsController {
 		String profilePath = "/profile/wow/character";
 		String region = pathRegion.isPresent() ? pathRegion.get().toUpperCase() : "EU";
 		String bracket = pathBracket.isPresent() ? pathBracket.get() : "3v3";
+		//Seasons different than 8 are currently not supported
 		String pvpSeason = pathSeason.isPresent() ? pathBracket.get() : "8";
 		String namespaceLeaderboard;
 		String namespaceProfile;
@@ -173,7 +178,7 @@ public class LeaderboardsController {
 				//save player
 				playerService.save(myPlayer);
 				
-
+				System.out.println("breakpoint");
 				
 						
 			}
@@ -182,6 +187,60 @@ public class LeaderboardsController {
 		return "leaderboards";
 	}
 	
+	@GetMapping(value = {"", "/{pathRegion}/{pathBracket}","/{pathRegion}/{pathBracket}/{pathSeason}"})
+	public String showLeaderboards(@PathVariable Optional<String> pathRegion, @PathVariable Optional<String> pathBracket, @PathVariable Optional<String> pathSeason, ModelMap model) {
+		
+		String region = pathRegion.isPresent() ? pathRegion.get().toUpperCase() : "EU";
+		String bracket = pathBracket.isPresent() ? pathBracket.get() : "3v3";
+		
+		String leaderboardsPath = "/data/wow";
+		//Seasons different than 8 are currently not supported
+		String pvpSeason = pathSeason.isPresent() ? pathBracket.get() : "8";
+		String namespaceLeaderboard;
+		String locale;
+		String pvpRegion;
+		WebClient client;
 
+		
+		if (region.equals("EU")) {
+			namespaceLeaderboard = "dynamic-classic-eu";
+			locale = "en_GB";
+			pvpRegion = "0";
+			client = euWebClient;
+		}else{
+			namespaceLeaderboard = "dynamic-classic-us";
+			locale = "en_US";
+			pvpRegion = "1";
+			client = usWebClient;
+			}
+		
+		/* TODO Implement Season cut-offs.
+				Most likely within update function
+				
+				
+		RewardsResponse response = client.get()
+				.uri(uriBuilder -> uriBuilder
+						.path(leaderboardsPath)
+						.pathSegment("pvp-region", pvpRegion,"pvp-season", pvpSeason,"pvp-reward", "index")
+					    .queryParam("namespace", namespaceLeaderboard)
+					    .build())
+					  .retrieve()
+					  .bodyToMono(RewardsResponse.class)
+//					  .bodyToMono(new ParameterizedTypeReference<List<Reward>>() {
+//					})
+					  .block();
+		
+//		/data/wow/pvp-region/{pvpRegionId}/pvp-season/{pvpSeasonId}/pvp-reward/index
+		
+		
+		*/
+		List<Player> myList = playerService.getPlayersByRegionAndBracket(region, bracket);
+		
+		model.put("leaderboards", myList);
+		model.addAttribute("region", region);
+		model.addAttribute("bracket", bracket);
+		
+		return "leaderboards";
+	}
 
 }

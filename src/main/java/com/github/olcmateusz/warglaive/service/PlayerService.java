@@ -1,5 +1,6 @@
 package com.github.olcmateusz.warglaive.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,11 @@ public class PlayerService {
 	
 	public Player getPlayer(long id) {
 		return null;
+	}
+	
+	public List<Player> getPlayersByRegionAndBracket(String region, String bracket){
+		
+		return playerRepo.findByRegionAndBracket(region, bracket);
+		
 	}
 }

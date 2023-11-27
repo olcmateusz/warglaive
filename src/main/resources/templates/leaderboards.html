@@ -7,8 +7,24 @@
 <body>
 <div th:insert="~{fragments/general :: menu}"></div>
 <div class="content" style="background-color:rgba(16,16,16,0.8); justify-content: center;">
-	<h1>3v3 Leaderboards</h1>
+	<h1>Leaderboards</h1>
 	<div>
+	<form th:action="@{'/leaderboards/' + ${region} + '/2v2'}" method="get">
+	    <button type="submit">2v2</button>
+	</form>
+
+	<form th:action="@{'/leaderboards/' + ${region} + '/3v3'}" method="get">
+	    <button type="submit">3v3</button>
+	</form>
+	<form th:action="@{'/leaderboards/' + 'EU/' + ${bracket}}" method="get">
+	    <button type="submit">EU</button>
+	</form>
+	<form th:action="@{'/leaderboards/' + 'US/' + ${bracket}}" method="get">
+	    <button type="submit">US</button>
+	</form>
+	</div>
+	<div>
+
 	<a th:href="@{/leaderboards/EU/2v2}">Click pls</a>
 	</div>
 	<table>
@@ -34,11 +50,11 @@
 	    <!-- Character name -->
 	    <td th:text="${player.character.name}"></td>
 	    <!-- Character class -->
-	    <td>Class Placeholder</td>
+	    <td th:text="${player.character.character_class.name}"></td>
 	    <!-- Character race -->
-	    <td>Race Placeholder</td>
+	    <td th:text="${player.character.race.name}"></td>
 	    <!-- Character realm -->
-	    <td>Realm Placeholder</td>
+	    <td th:text="${player.character.realm.name}"></td>
 	    <!-- Character win/lose stats -->
 	    <td th:text="|${player.season_match_statistics.won}/${player.season_match_statistics.lost}|"></td>
 	    <!-- Win percentage -->
