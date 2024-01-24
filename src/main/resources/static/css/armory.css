@@ -1,0 +1,43 @@
+.search-box{
+  width: 600px;
+  background: #fff;
+  margin: 50px auto 0;
+  border-radius: 5px;
+}
+
+.row{
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+input{
+  flex: 1;
+  height: 50px;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-family: inherit;
+  color: inherit;
+  font-size: 25px;
+}
+
+.result-box ul{
+  border-top: 1px solid #999;
+  padding: 15px 10px;
+}
+
+.result-box ul li{
+  width: 100%;
+  list-style: none;
+  border-radius: 3px;
+  padding: 15px 10px;
+}
+.result-box ul li:hover{
+  background: #e9f3ff;
+}
+
+.resultBox{
+  max-height: 300px;
+  overflow-y: scroll;
+}

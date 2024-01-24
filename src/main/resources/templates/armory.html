@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<div th:replace="~{fragments/general :: head}"></div>
+<link th:href="@{/css/armory.css}" rel="stylesheet">
+
+</head>
+<body>
+<div th:insert="~{fragments/general :: menu}"></div>
+<div class="content" style="background-color:rgba(16,16,16,0.8); height:60vh; justify-content: center;">
+  <script th:inline="javascript">
+    var characters = /*[[${characters}]]*/ {};
+    console.log(characters);
+</script>
+    <h1>ARMORY PAGE</h1>
+
+    <form action="/armory" method="post" id="character-form">
+      <div class="search-box">
+        <div class="row">
+          <input id="character-id" name="id" type="hidden" />
+          <input type="text" id="input-box" placeholder="Search Character" autocomplete="off">
+
+        </div>
+        <div class="result-box" style="font-size: 25px">
+        </div>
+      </div>
+    </form>
+</div>
+<div th:insert="~{fragments/general :: footer}"></div>
+<script type="text/javascript" th:src="@{/js/searchAutocomplete.js}"></script>
+</body>
+</html>

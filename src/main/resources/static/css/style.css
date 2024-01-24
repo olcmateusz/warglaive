@@ -134,7 +134,7 @@ input{
 }
 .mobileNav a{
   text-decoration: none;
-  background-image: url(..//IMG/background_nav.jpg);
+  background-image: url(../IMG/background_nav.jpg);
   color: #DAA520;
   border-top: solid 3px #000;
 }
