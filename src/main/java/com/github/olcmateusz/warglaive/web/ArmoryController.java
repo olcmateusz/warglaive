@@ -46,8 +46,15 @@ public class ArmoryController {
 	
 	@GetMapping("characters/{characterId}")
 	public String playerInfo(@PathVariable Long characterId, ModelMap model) {
-		Optional<PlayableCharacter> character = playableCharacterServcie.getById(characterId);
-		model.put("character", character);
+		Optional<PlayableCharacter> characterOpt = playableCharacterServcie.getById(characterId);
+		if (characterOpt.isPresent()) {
+			PlayableCharacter character = characterOpt.get();
+			model.put("character", character);
+			
+		}else {
+			//TODO
+			//error when no playableCharacter found
+		}
 		return "character";
 	}
 	

@@ -26,9 +26,9 @@
 	    <button style="height:100%" type="submit">US</button>
 	</form>
 	</div>
-	
-	
-	<table>
+
+
+	<table class="leaderboardsTable" cellspacing="0" cellpadding="0">
 	  <tr>
 	    <th>Title</th>
 	    <th>Rank</th>
@@ -41,9 +41,9 @@
 	    <th>Win ratio</th>
 	    <th>Faction</th>
 	  </tr>
-	  <tr th:each="player : ${leaderboards}">
+	  <tr th:each="player : ${leaderboards}" th:onclick="'window.location.href=\'/armory/characters/' + ${player.character.id} + '\''">
 	  	<!-- Expected Title -->
-	  	<td>Title</td>
+	  	<td>TP</td>
 	  	<!-- Current rank -->
 	    <td th:text="${player.rank}"></td>
 	    <!-- Current rating -->
@@ -57,11 +57,24 @@
 	    <!-- Character realm -->
 	    <td th:text="${player.character.realm.name}"></td>
 	    <!-- Character win/lose stats -->
-	    <td th:text="|${player.season_match_statistics.won}/${player.season_match_statistics.lost}|"></td>
+	    <!-- <td th:text="|${player.season_match_statistics.won}/${player.season_match_statistics.lost}|"></td> -->
+			<td>
+			   <span style="color: green;" th:text="${player.season_match_statistics.won}"></span>
+				 <span>/</span>
+				 <span style="color: red;" th:text="${player.season_match_statistics.lost}"></span>
+			</td>
 	    <!-- Win percentage -->
-	    <td th:with="ratio=${(100 * player.season_match_statistics.won) / player.season_match_statistics.played}" th:text="${ratio}"></td>
+	    <td th:with="ratio=${(100 * player.season_match_statistics.won) / player.season_match_statistics.played}" th:text="|${ratio}%|"></td>
 	    <!-- Faction -->
-	    <td th:text="${player.faction}"></td>
+	    <td th:with="faction=${player.faction}">
+				<span th:style="${faction == T(com.github.olcmateusz.warglaive.enums.Faction).ALLIANCE ? 'color:blue' : 'color:red'}"
+							th:text="${faction == T(com.github.olcmateusz.warglaive.enums.Faction).ALLIANCE ? 'A' : 'H'}">
+			</span>
+			</td>
+			<!-- <td th:with="faction=${player.faction}">
+			    <span th:text="${faction}"></span>
+			    <span th:style="${faction == T(com.github.olcmateusz.warglaive.enums.Faction).ALLIANCE ? 'color:blue' : 'color:red'}"></span>
+			</td> -->
 	  </tr>
 	</table>
 	<!--

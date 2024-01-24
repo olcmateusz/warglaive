@@ -9,6 +9,12 @@
 <div th:insert="~{fragments/general :: menu}"></div>
 <div class="content" style="background-color:rgba(16,16,16,0.8); height:60vh; justify-content: center;">
   <h1>Character PAGE</h1>
+  <div class="">
+    <p th:text="${character.name}">Test</p>
+    <p th:text="${character.character_class.name}">Test</p>
+    <p th:text="${character.race.name}">Test</p>
+    <p th:text="${character.realm.name}">Test</p>
+  </div>
 </div>
 <div th:insert="~{fragments/general :: footer}"></div>
 <script type="text/javascript" th:src="@{/js/searchAutocomplete.js}"></script>
