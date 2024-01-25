@@ -21,8 +21,6 @@ import com.github.olcmateusz.warglaive.domain.Player;
 import com.github.olcmateusz.warglaive.domain.Race;
 import com.github.olcmateusz.warglaive.domain.Realm;
 import com.github.olcmateusz.warglaive.domain.Statistic;
-import com.github.olcmateusz.warglaive.domain.rewards.Reward;
-import com.github.olcmateusz.warglaive.domain.rewards.RewardsResponse;
 import com.github.olcmateusz.warglaive.service.CharacterClassService;
 import com.github.olcmateusz.warglaive.service.PlayableCharacterService;
 import com.github.olcmateusz.warglaive.service.PlayerService;
@@ -215,23 +213,7 @@ public class LeaderboardsController {
 			}
 		
 		/* TODO Implement Season cut-offs.
-				Most likely within update function
-				
-				
-		RewardsResponse response = client.get()
-				.uri(uriBuilder -> uriBuilder
-						.path(leaderboardsPath)
-						.pathSegment("pvp-region", pvpRegion,"pvp-season", pvpSeason,"pvp-reward", "index")
-					    .queryParam("namespace", namespaceLeaderboard)
-					    .build())
-					  .retrieve()
-					  .bodyToMono(RewardsResponse.class)
-//					  .bodyToMono(new ParameterizedTypeReference<List<Reward>>() {
-//					})
-					  .block();
-		
-//		/data/wow/pvp-region/{pvpRegionId}/pvp-season/{pvpSeasonId}/pvp-reward/index
-		
+			
 		
 		*/
 		List<Player> myList = playerService.getPlayersByRegionAndBracket(region, bracket);
