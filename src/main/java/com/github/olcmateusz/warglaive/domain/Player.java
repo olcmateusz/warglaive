@@ -28,6 +28,9 @@ public class Player {
 	private int rank;
 	private int rating;
 	private String bracket;
+	@ManyToOne
+	@JoinColumn(name="bracket_id")
+	private Bracket bracketFull;
 	private String region;
 	@ManyToOne
 	@JoinColumn(name="season_match_statistics_id")
@@ -48,13 +51,26 @@ public class Player {
 	
 	
 
-	public Player(PlayableCharacter character, Faction faction, int rank, int rating, String bracket, String region,
+	public Player(long id, PlayableCharacter character, Faction faction, int rank, int rating, String bracket,
+			String region, Statistic season_match_statistics) {
+		this.id = id;
+		this.character = character;
+		this.faction = faction;
+		this.rank = rank;
+		this.rating = rating;
+		this.bracket = bracket;
+		this.region = region;
+		this.season_match_statistics = season_match_statistics;
+	}
+
+	public Player(PlayableCharacter character, Faction faction, int rank, int rating, String bracket, Bracket bracketFull, String region,
 			Statistic season_match_statistics) {
 		this.character = character;
 		this.faction = faction;
 		this.rank = rank;
 		this.rating = rating;
 		this.bracket = bracket;
+		this.bracketFull = bracketFull;
 		this.region = region;
 		this.season_match_statistics = season_match_statistics;
 	}
@@ -115,6 +131,14 @@ public class Player {
 
 	public void setBracket(String bracket) {
 		this.bracket = bracket;
+	}
+
+	public Bracket getBracketFull() {
+		return bracketFull;
+	}
+
+	public void setBracketFull(Bracket bracketFull) {
+		this.bracketFull = bracketFull;
 	}
 
 	public String getRegion() {

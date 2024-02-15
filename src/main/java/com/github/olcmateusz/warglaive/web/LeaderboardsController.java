@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,19 +12,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.olcmateusz.warglaive.domain.CharacterClass;
 import com.github.olcmateusz.warglaive.domain.LeaderboardsResponse;
 import com.github.olcmateusz.warglaive.domain.PlayableCharacter;
 import com.github.olcmateusz.warglaive.domain.Player;
+import com.github.olcmateusz.warglaive.domain.PvPRewardsResponse;
 import com.github.olcmateusz.warglaive.domain.Race;
 import com.github.olcmateusz.warglaive.domain.Realm;
+import com.github.olcmateusz.warglaive.domain.Reward;
 import com.github.olcmateusz.warglaive.domain.Statistic;
+import com.github.olcmateusz.warglaive.service.BracketService;
 import com.github.olcmateusz.warglaive.service.CharacterClassService;
 import com.github.olcmateusz.warglaive.service.PlayableCharacterService;
 import com.github.olcmateusz.warglaive.service.PlayerService;
 import com.github.olcmateusz.warglaive.service.RaceService;
 import com.github.olcmateusz.warglaive.service.RealmService;
+import com.github.olcmateusz.warglaive.service.RewardService;
 import com.github.olcmateusz.warglaive.service.StatisticService;
 
 import reactor.core.publisher.Mono;
@@ -37,7 +42,9 @@ import reactor.util.retry.Retry;
 @RequestMapping("/leaderboards")
 public class LeaderboardsController {
 	
+	//do wywalenia
     private WebClient webClient;
+    //
     private WebClient euWebClient;
     private WebClient usWebClient;
     private RaceService raceService;
@@ -46,6 +53,8 @@ public class LeaderboardsController {
     private StatisticService statisticService;
     private PlayerService playerService;
     private PlayableCharacterService playableCharacterService;
+    private RewardService rewardService;
+    private BracketService bracketService;
 
 //    private static final double REQUEST_PER_SECOND = 95.0;
 //    private final RateLimiter rateLimiter = RateLimiter.create(REQUEST_PER_SECOND);
@@ -53,7 +62,7 @@ public class LeaderboardsController {
 
 	public LeaderboardsController(WebClient webClient, WebClient usWebClient, WebClient euWebClient,
 				RaceService raceService, CharacterClassService characterClassService, RealmService realmService,StatisticService statisticService,
-				PlayerService playerService,PlayableCharacterService playableCharacterService) {
+				PlayerService playerService,PlayableCharacterService playableCharacterService, RewardService rewardService, BracketService bracketService) {
 			this.webClient = webClient;
 			this.euWebClient = euWebClient;
 			this.usWebClient = usWebClient;
@@ -63,6 +72,8 @@ public class LeaderboardsController {
 			this.statisticService = statisticService;
 			this.playerService = playerService;
 			this.playableCharacterService = playableCharacterService;
+			this.rewardService = rewardService;
+			this.bracketService = bracketService;
 		}
 
 	@GetMapping(value ={"update", "update/{pathRegion}/{pathBracket}", "update/{pathRegion}/{pathBracket}/{pvpSeason}" })
@@ -103,7 +114,40 @@ public class LeaderboardsController {
 		//figure out if all character_classes are present
 		characterClassService.addAllClassesIfEmpty();
 		
+		/* TODO
+		 * Update bracket rating cutoffs
+		 */
 		
+		////////////////////////
+		UriComponents uriComponents = UriComponentsBuilder.newInstance()
+			    .path(leaderboardsPath)
+			    .pathSegment("pvp-region", pvpRegion, "pvp-season", pvpSeason, "pvp-reward", "index")
+			    .queryParam("namespace", namespaceLeaderboard)
+			    .queryParam("locale", locale)
+			    .build();
+
+		System.out.println("Request URI: " + uriComponents.toUriString()); // Log the URI
+		
+		PvPRewardsResponse pvpResponse = client.get()
+				.uri(uriBuilder -> uriBuilder
+						.path(leaderboardsPath)
+						.pathSegment("pvp-region", pvpRegion,"pvp-season", pvpSeason,"pvp-reward","index")
+					    .queryParam("namespace", namespaceLeaderboard)
+					    .queryParam("locale", locale)
+					    .build())
+					  .retrieve()
+					  .bodyToMono(PvPRewardsResponse.class)
+					  .block();
+
+		pvpResponse.getRewards();
+		
+		for(Reward reward : pvpResponse.getRewards()) {
+			rewardService.saveReward(reward);
+		}
+		
+		
+		 
+		////////////////////////
 		LeaderboardsResponse response = client.get()
 				.uri(uriBuilder -> uriBuilder
 						.path(leaderboardsPath)
@@ -169,6 +213,7 @@ public class LeaderboardsController {
 				
 				//add Bracket to player
 				myPlayer.setBracket(bracket);
+				myPlayer.setBracketFull(bracketService.getBracket(response.getBracket()));
 				
 				//save Statistics
 				Statistic myStats = statisticService.getStatistics(myPlayer.getSeason_match_statistics());
@@ -212,10 +257,7 @@ public class LeaderboardsController {
 			client = usWebClient;
 			}
 		
-		/* TODO Implement Season cut-offs.
-			
-		
-		*/
+
 		List<Player> myList = playerService.getPlayersByRegionAndBracket(region, bracket);
 		
 		model.put("leaderboards", myList);

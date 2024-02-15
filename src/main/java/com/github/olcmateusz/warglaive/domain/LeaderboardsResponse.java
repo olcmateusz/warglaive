@@ -9,9 +9,11 @@ public class LeaderboardsResponse {
 
 	private int id;
 	private String name;
+	private Bracket bracket;
 	private List<Player> entries;
 	
 	
+
 
 	public int getId() {
 		return id;
@@ -27,6 +29,14 @@ public class LeaderboardsResponse {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Bracket getBracket() {
+		return bracket;
+	}
+
+	public void setBracket(Bracket bracket) {
+		this.bracket = bracket;
 	}
 
 	public List<Player> getEntries() {
