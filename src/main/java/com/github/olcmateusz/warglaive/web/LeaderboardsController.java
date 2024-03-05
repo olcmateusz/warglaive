@@ -1,6 +1,8 @@
 package com.github.olcmateusz.warglaive.web;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -259,6 +261,8 @@ public class LeaderboardsController {
 		
 
 		List<Player> myList = playerService.getPlayersByRegionAndBracket(region, bracket);
+		
+		Collections.sort(myList, Comparator.comparing(Player::getRank));
 		
 		model.put("leaderboards", myList);
 		model.addAttribute("region", region);

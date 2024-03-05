@@ -1,7 +1,6 @@
 package com.github.olcmateusz.warglaive.schedule;
 
 import java.time.Duration;
-import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +72,7 @@ public class LeaderboardsWatcher {
 	 * further read: https://crontab.guru/ https://www.freeformatter.com/cron-expression-generator-quartz.html
 	 */
 	// every 3 hours: cron = "0 0 */3 * * *"
-	@Scheduled(cron = "59 48 * * * *")
+	@Scheduled(cron = "59 03 * * * *")
 	public void runUpdates() {
 //		for(String region : Arrays.asList("US","EU")) {
 //			for (String bracket: Arrays.asList("2v2","3v3","5v5")) {
@@ -89,8 +88,6 @@ public class LeaderboardsWatcher {
 		String leaderboardsPath = "/data/wow";
 		String profilePath = "/profile/wow/character";
 
-		//Seasons different than 8 are currently not supported
-//		String pvpSeason = pathSeason.isPresent() ? pathBracket.get() : "8";
 		String pvpSeason = "8";
 		String namespaceLeaderboard;
 		String namespaceProfile;
@@ -117,7 +114,6 @@ public class LeaderboardsWatcher {
 		System.out.println(bracket);
 		System.out.println(pvpSeason);
 
-		int count =0;
 		
 		//Figure out if all races are present
 		raceService.addAllRacesIfEmpty();
@@ -221,6 +217,9 @@ public class LeaderboardsWatcher {
 				//add Region to player
 				myPlayer.setRegion(region);
 				
+				myPlayer.setRank(player.getRank());
+				myPlayer.setRating(player.getRating());
+				
 				//add Bracket to player
 				myPlayer.setBracket(bracket);
 				myPlayer.setBracketFull(bracketService.getBracket(response.getBracket()));
@@ -231,11 +230,6 @@ public class LeaderboardsWatcher {
 				//save player
 				playerService.save(myPlayer);
 				
-
-				System.out.println("player "+count+" created.");
-				System.out.println(myPlayer.toString());
-				System.out.println(myPlayer.getCharacter().getName());
-				count++;
 						
 			}
 
