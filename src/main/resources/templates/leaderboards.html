@@ -27,7 +27,15 @@
 	</form>
 	</div>
 
-
+	<!-- Display Pagination -->
+	<div style="margin-top: 20px;">
+	    <a th:if="${currentPage > 1}" th:href="@{/leaderboards/{region}/{bracket}/{page}(region=${region}, bracket=${bracket}, page=${1})}">First</a>
+	    <a th:if="${currentPage > 1}" th:href="@{/leaderboards/{region}/{bracket}/{page}(region=${region}, bracket=${bracket}, page=${currentPage - 1})}">Previous</a>
+	    <span>Page <span th:text="${currentPage}"></span> of <span th:text="${totalPages}"></span></span>
+	    <a th:if="${currentPage < totalPages}" th:href="@{/leaderboards/{region}/{bracket}/{page}(region=${region}, bracket=${bracket}, page=${currentPage + 1})}">Next</a>
+	    <a th:if="${currentPage < totalPages}" th:href="@{/leaderboards/{region}/{bracket}/{page}(region=${region}, bracket=${bracket}, page=${totalPages})}">Last</a>
+	</div>
+	
 	<table class="leaderboardsTable" cellspacing="0" cellpadding="0">
 	  <tr>
 	    <th>Title</th>

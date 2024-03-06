@@ -25,7 +25,7 @@ Run application with
 - [x] Character search
 - [x] searchbar autocomplete
 - [x] Scheduled Leaderboards update
-- [ ] Implement pagination for leaderboards
+- [x] Implement pagination for leaderboards
 - [ ] Refactor update funtion
 - [ ] Add Character talents
 - [ ] Add Character items

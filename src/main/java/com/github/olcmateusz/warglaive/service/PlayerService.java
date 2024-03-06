@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.github.olcmateusz.warglaive.domain.Player;
@@ -28,9 +30,8 @@ public class PlayerService {
 		return null;
 	}
 	
-	public List<Player> getPlayersByRegionAndBracket(String region, String bracket){
-		
-		return playerRepo.findByRegionAndBracket(region, bracket);
-		
+	
+	public Page<Player> getPlayersByRegionAndBracketPaginated(String region, String bracket, PageRequest pageRequest){
+        return playerRepo.findByRegionAndBracket(region, bracket, pageRequest);
 	}
 }
