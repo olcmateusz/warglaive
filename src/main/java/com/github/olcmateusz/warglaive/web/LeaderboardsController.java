@@ -1,8 +1,6 @@
 package com.github.olcmateusz.warglaive.web;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +13,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.util.UriComponents;
@@ -48,9 +45,7 @@ import reactor.util.retry.Retry;
 @RequestMapping("/leaderboards")
 public class LeaderboardsController {
 	
-	//do wywalenia
-    private WebClient webClient;
-    //
+
     private WebClient euWebClient;
     private WebClient usWebClient;
     private RaceService raceService;
@@ -66,10 +61,9 @@ public class LeaderboardsController {
 //    private final RateLimiter rateLimiter = RateLimiter.create(REQUEST_PER_SECOND);
 
 
-	public LeaderboardsController(WebClient webClient, WebClient usWebClient, WebClient euWebClient,
+	public LeaderboardsController(WebClient usWebClient, WebClient euWebClient,
 				RaceService raceService, CharacterClassService characterClassService, RealmService realmService,StatisticService statisticService,
 				PlayerService playerService,PlayableCharacterService playableCharacterService, RewardService rewardService, BracketService bracketService) {
-			this.webClient = webClient;
 			this.euWebClient = euWebClient;
 			this.usWebClient = usWebClient;
 			this.raceService = raceService;
@@ -120,11 +114,7 @@ public class LeaderboardsController {
 		//figure out if all character_classes are present
 		characterClassService.addAllClassesIfEmpty();
 		
-		/* TODO
-		 * Update bracket rating cutoffs
-		 */
-		
-		////////////////////////
+
 		UriComponents uriComponents = UriComponentsBuilder.newInstance()
 			    .path(leaderboardsPath)
 			    .pathSegment("pvp-region", pvpRegion, "pvp-season", pvpSeason, "pvp-reward", "index")
@@ -249,28 +239,6 @@ public class LeaderboardsController {
 		int currentPage = page.isPresent() ? page.get() : 1;
 		int pageSize = 100;
 		
-//		String leaderboardsPath = "/data/wow";
-		//Seasons different than 8 are currently not supported
-//		String pvpSeason = pathSeason.isPresent() ? pathBracket.get() : "8";
-//		String namespaceLeaderboard;
-//		String locale;
-//		String pvpRegion;
-//		WebClient client;
-//
-//		
-//		if (region.equals("EU")) {
-//			namespaceLeaderboard = "dynamic-classic-eu";
-//			locale = "en_GB";
-//			pvpRegion = "0";
-//			client = euWebClient;
-//		}else{
-//			namespaceLeaderboard = "dynamic-classic-us";
-//			locale = "en_US";
-//			pvpRegion = "1";
-//			client = usWebClient;
-//			}
-//		
-
 
 		PageRequest pageRequest = PageRequest.of(currentPage - 1, pageSize, Sort.by("rank"));
 		

@@ -31,8 +31,6 @@ public class ArmoryController {
 	@GetMapping("")
 	public String armoryMain(ModelMap model) {
 		
-		List<String> allNames = playableCharacterServcie.getAllNames();
-		
 		List<PlayableCharacter> characters = playableCharacterServcie.getAll();
 		
 		List<PlayableCharacterDto> charactersDto = characters.stream()
